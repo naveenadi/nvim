@@ -1,4 +1,9 @@
 return {
+  dap = {
+    expanded = '',
+    collapsed = '',
+    circular = '',
+  },
   diagnostics = {
     -- Error = ' ',
     -- Warn = ' ',
@@ -17,6 +22,17 @@ return {
     Hint = '',
     Debug = '',
     Trace = '✎',
+  },
+  documents = {
+    File = '',
+    Files = '',
+    Folder = '',
+    OpenFolder = '',
+    EmptyFolder = '',
+    EmptyOpenFolder = '',
+    Unknown = '',
+    Symlink = '',
+    FolderSymlink = '',
   },
   git = {
     added = ' ',
