@@ -111,4 +111,22 @@ return {
       require('mason-lspconfig').setup_handlers { setup }
     end,
   },
+
+  -- formatters
+  {
+    'jose-elias-alvarez/null-ls.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
+    dependencies = { 'mason.nvim' },
+    opts = function()
+      local nls = require 'null-ls'
+      return {
+        sources = {
+          -- nls.builtins.formatting.prettierd,
+          nls.builtins.formatting.stylua,
+          nls.builtins.formatting.black,
+          nls.builtins.diagnostics.ruff.with { extra_args = { '--max-line-length=180' } },
+        },
+      }
+    end,
+  },
 }
