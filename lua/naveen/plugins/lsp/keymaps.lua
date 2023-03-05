@@ -5,7 +5,7 @@ M._keys = nil
 
 ---@return (LazyKeys|{has?:string})[]
 function M.get()
-  local format = require('lazyvim.plugins.lsp.format').format
+  local format = require('naveen.plugins.lsp.format').format
   if not M._keys then
   ---@class PluginLspKeys
     -- stylua: ignore
@@ -31,8 +31,8 @@ function M.get()
       { "<leader>cf", format, desc = "Format Range", mode = "v", has = "documentRangeFormatting" },
       { "<leader>cr", M.rename, expr = true, desc = "Rename", has = "rename" },
       
-      { "<leader>cs", require("telescope.builtin").lsp_document_symbols,  desc = "Document Symbols"  },
-      { "<leader>cS", require("telescope.builtin").lsp_dynamic_workspace_symbols,  desc = "Workspace Symbols"  },
+      -- { "<leader>cs", require("telescope.builtin").lsp_document_symbols,  desc = "Document Symbols"  },
+      -- { "<leader>cS", require("telescope.builtin").lsp_dynamic_workspace_symbols,  desc = "Workspace Symbols"  },
     }
   end
   return M._keys
