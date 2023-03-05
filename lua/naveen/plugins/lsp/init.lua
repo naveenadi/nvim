@@ -37,6 +37,13 @@ return {
       { 'smjonas/inc-rename.nvim', config = true },
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
+      {
+        'hrsh7th/cmp-nvim-lsp',
+        'hrsh7th/cmp-nvim-lsp-signature-help',
+        cond = function()
+          return require('naveen.util').has 'nvim-cmp'
+        end,
+      },
     },
     ---@class PluginLspOpts
     opts = {
