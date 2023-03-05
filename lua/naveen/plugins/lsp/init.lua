@@ -31,15 +31,26 @@ return {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
-      { "folke/neoconf.nvim", cmd = "Neoconf", config = true },
-      { "folke/neodev.nvim", opts = { experimental = { pathStrict = true } } },
-      { "j-hui/fidget.nvim", config = true },
-      { "smjonas/inc-rename.nvim", config = true },
+      { 'folke/neoconf.nvim', cmd = 'Neoconf', config = true },
+      { 'folke/neodev.nvim', opts = { experimental = { pathStrict = true } } },
+      { 'j-hui/fidget.nvim', config = true },
+      { 'smjonas/inc-rename.nvim', config = true },
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
     },
     ---@class PluginLspOpts
     opts = {
+      -- Automatically format on save
+      autoformat = true,
+      -- options for vim.lsp.buf.format
+      -- `bufnr` and `filter` is handled by the LazyVim formatter,
+      -- but can be also overridden when specified
+      format = {
+        formatting_options = nil,
+        timeout_ms = nil,
+      },
+      -- LSP Server Settings
+      ---@type lspconfig.options
       servers = {
         jsonls = {},
         lua_ls = {
@@ -51,6 +62,7 @@ return {
             },
           },
         },
+        dockerls = {},
       },
       -- you can do any additional lsp server setup here
       -- return true if you don't want this server to be setup with lspconfig
@@ -67,52 +79,7 @@ return {
     },
     ---@param opts PluginLspOpts
     config = function(plugin, opts)
-      local servers = opts.servers
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-      local function setup(server)
-        local server_opts = vim.tbl_deep_extend('force', {
-          capabilities = vim.deepcopy(capabilities),
-        }, servers[server] or {})
-
-        if opts.setup[server] then
-          if opts.setup[server](server, server_opts) then
-            return
-          end
-        elseif opts.setup['*'] then
-          if opts.setup['*'](server, server_opts) then
-            return
-          end
-        end
-        require('lspconfig')[server].setup(server_opts)
-      end
-
-      -- temp fix for lspconfig rename
-      -- https://github.com/neovim/nvim-lspconfig/pull/2439
-      local mappings = require 'mason-lspconfig.mappings.server'
-      if not mappings.lspconfig_to_package.lua_ls then
-        mappings.lspconfig_to_package.lua_ls = 'lua-language-server'
-        mappings.package_to_lspconfig['lua-language-server'] = 'lua_ls'
-      end
-
-      local mlsp = require 'mason-lspconfig'
-      local available = mlsp.get_available_servers()
-
-      local ensure_installed = {} ---@type string[]
-      for server, server_opts in pairs(servers) do
-        if server_opts then
-          server_opts = server_opts == true and {} or server_opts
-          -- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
-          if server_opts.mason == false or not vim.tbl_contains(available, server) then
-            setup(server)
-          else
-            ensure_installed[#ensure_installed + 1] = server
-          end
-        end
-      end
-
-      require('mason-lspconfig').setup { ensure_installed = ensure_installed }
-      require('mason-lspconfig').setup_handlers { setup }
+      require('naveen.plugins.lsp.servers').setup(plugin, opts)
     end,
   },
 
