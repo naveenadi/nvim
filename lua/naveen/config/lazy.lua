@@ -17,9 +17,9 @@ require('lazy').setup {
   spec = {
     { import = 'naveen.plugins' },
     { import = 'naveen.plugins.extras.lang' },
-    -- { import = "plugins.extras.ui" },
-    -- { import = "plugins.extras.pde" },
-    -- { import = "plugins.extras.pde.notes" },
+    -- { import = "naveen.plugins.extras.ui" },
+    -- { import = 'naveen.plugins.extras.pde' },
+    { import = 'naveen.plugins.extras.pde.notes' },
   },
   defaults = { lazy = true, version = nil },
   install = { missing = true, colorscheme = { 'tokyonight', 'gruvbox' } },
