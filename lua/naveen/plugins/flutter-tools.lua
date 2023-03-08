@@ -2,17 +2,11 @@ return {
   {
     'akinsho/flutter-tools.nvim',
     lazy = false,
-    dev = true,
     dependencies = {
       'nvim-lua/plenary.nvim',
       { 'RobertBrunhage/flutter-riverpod-snippets', lazy = false },
     },
     config = function()
-      local flutter = pcall(require, 'flutter-tools')
-      if not flutter then
-        return
-      end
-
       require('flutter-tools').setup {
         -- deugger currently disable until dap are insralled for it' setup
         -- debugger = {

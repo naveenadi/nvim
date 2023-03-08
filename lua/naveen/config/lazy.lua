@@ -16,7 +16,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup {
   spec = {
     { import = 'naveen.plugins' },
-    -- { import = "plugins.extras.lang" },
+    { import = 'naveen.plugins.extras.lang' },
     -- { import = "plugins.extras.ui" },
     -- { import = "plugins.extras.pde" },
     -- { import = "plugins.extras.pde.notes" },
