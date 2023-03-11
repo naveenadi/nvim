@@ -14,10 +14,11 @@ return {
       'hrsh7th/cmp-cmdline',
       -- "hrsh7th/cmp-calc",
       -- "f3fora/cmp-spell",
-      -- 'saadparwaiz1/cmp_luasnip',
+      'saadparwaiz1/cmp_luasnip',
     },
     opts = function()
       local cmp = require 'cmp'
+      local luasnip = require 'luasnip'
       local compare = require 'cmp.config.compare'
 
       -- Determines when words are present before the cursor.
@@ -32,7 +33,7 @@ return {
         },
         snippet = {
           expand = function(args)
-            -- require('luasnip').lsp_expand(args.body)
+            require('luasnip').lsp_expand(args.body)
           end,
         },
         mapping = cmp.mapping.preset.insert {
@@ -50,8 +51,10 @@ return {
           ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
-            -- elseif luasnip.expand_or_jumpable() then
-            -- luasnip.expand_or_jump()
+            -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
+            -- they way you will only jump inside the snippet region
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
             elseif has_words_before() then
               cmp.complete()
             else
@@ -61,14 +64,15 @@ return {
           ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_prev_item()
-            -- elseif luasnip.jumpable(-1) then
-            -- luasnip.jump(-1)
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
             else
               fallback()
             end
           end, { 'i', 's' }),
         },
         sources = cmp.config.sources {
+          { name = 'nvim_lsp_signature_help' },
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'buffer' },
@@ -122,5 +126,43 @@ return {
         }),
       })
     end,
+  },
+
+  -- snippets
+  {
+    'L3MON4D3/LuaSnip',
+    build = (not jit.os:find 'Windows') and "echo -e 'NOTE: jsregexp is optional, so not a big deal if it fails to build\n'; make install_jsregexp" or nil,
+    dependencies = {
+      'rafamadriz/friendly-snippets',
+      config = function()
+        require('luasnip.loaders.from_vscode').lazy_load()
+      end,
+    },
+    opts = {
+      history = true,
+      delete_check_events = 'TextChanged',
+    },
+    -- stylua: ignore
+    keys = {
+      {
+        "<tab>",
+        function()
+          return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
+        end,
+        expr = true, silent = true, mode = "i",
+      },
+      { "<tab>", function() require("luasnip").jump(1) end, mode = "s" },
+      { "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
+    },
+    --config = function(_, opts)
+    --  require('luasnip').setup(opts)
+
+    --  local snippets_folder = vim.fn.stdpath 'config' .. '/lua/naveen/plugins/completion/snippets/'
+    --   require('luasnip.loaders.from_lua').lazy_load { paths = snippets_folder }
+
+    --  vim.api.nvim_create_user_command('LuaSnipEdit', function()
+    --     require('luasnip.loaders.from_lua').edit_snippet_files()
+    --    end, {})
+    --  end,
   },
 }
