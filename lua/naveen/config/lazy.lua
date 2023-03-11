@@ -18,7 +18,7 @@ require('lazy').setup {
     { import = 'naveen.plugins' },
     { import = 'naveen.plugins.extras.lang' },
     -- { import = "naveen.plugins.extras.ui" },
-    -- { import = 'naveen.plugins.extras.pde' },
+    { import = 'naveen.plugins.extras.pde' },
     { import = 'naveen.plugins.extras.pde.notes' },
   },
   defaults = { lazy = true, version = nil },
