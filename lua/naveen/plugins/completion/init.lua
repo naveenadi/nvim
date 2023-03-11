@@ -154,15 +154,15 @@ return {
       { "<tab>", function() require("luasnip").jump(1) end, mode = "s" },
       { "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
     },
-    --config = function(_, opts)
-    --  require('luasnip').setup(opts)
+    config = function(_, opts)
+      require('luasnip').setup(opts)
 
-    --  local snippets_folder = vim.fn.stdpath 'config' .. '/lua/naveen/plugins/completion/snippets/'
-    --   require('luasnip.loaders.from_lua').lazy_load { paths = snippets_folder }
+      local snippets_folder = vim.fn.stdpath 'config' .. '/lua/naveen/plugins/completion/snippets/'
+      require('luasnip.loaders.from_lua').lazy_load { paths = snippets_folder }
 
-    --  vim.api.nvim_create_user_command('LuaSnipEdit', function()
-    --     require('luasnip.loaders.from_lua').edit_snippet_files()
-    --    end, {})
-    --  end,
+      vim.api.nvim_create_user_command('LuaSnipEdit', function()
+        require('luasnip.loaders.from_lua').edit_snippet_files()
+      end, {})
+    end,
   },
 }
